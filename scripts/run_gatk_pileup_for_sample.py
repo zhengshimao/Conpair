@@ -29,6 +29,7 @@ parser.add_option('-J', '--java', help='PATH to JAVA [java by default]', default
 parser.add_option('-t', '--temp_dir_java', help='temporary directory to set -Djava.io.tmpdir', action='store')
 parser.add_option('-m', '--xmx_java', help='Xmx java memory setting [default: 12g]', default='12g', action='store')
 parser.add_option('--remove_chr_prefix', help='REMOVE CHR PREFIX FROM THE CHROMOSOME COLUMN IN THE OUTPUT FILE [false by default]', default=False, action='store_true')
+parser.add_option('--gatk4', help='Use GATK4 instead of GATK3 or even lower versions', default=False, action='store_true') # zheng 
 
 
 (opts, args) = parser.parse_args()
@@ -55,6 +56,8 @@ if not os.path.exists(GATK):
     print('ERROR: GATK jar {0} cannot be find.'.format(GATK))
     sys.exit(2)
 
+GATK_file = os.path.basename(GATK)
+
 if opts.markers:
     MARKER_FILE = opts.markers
 else:
@@ -80,10 +83,26 @@ if opts.temp_dir_java:
 else:
     JAVA_TEMP = ""
 
+if opts.gatk4 :
+    if GATK_file == "gatk":
+        # del {7} opts.java
+        command_line = ("{2} --java-options '-Xmx{1} {0}'  Pileup -R {3} -I {4} -L {5} -O {6} " +
+                    "-verbose -RF NotDuplicateReadFilter -RF CigarContainsNoNOperator " +
+                    "-RF MatchingBasesAndQualsReadFilter").format(JAVA_TEMP, opts.xmx_java, GATK, REFERENCE, opts.bam, MARKER_FILE, opts.outfile, opts.java)
+    else:
+        command_line = ("{7} {0} -Xmx{1} -jar {2} Pileup -R {3} -I {4} -L {5} -O {6} " +
+                    "-verbose -RF NotDuplicateReadFilter -RF CigarContainsNoNOperator " +
+                    "-RF MatchingBasesAndQualsReadFilter").format(JAVA_TEMP, opts.xmx_java, GATK, REFERENCE, opts.bam, MARKER_FILE, opts.outfile, opts.java)
+else:
+    command_line = ("{7} {0} -Xmx{1} -jar {2} -T Pileup -R {3} -I {4} -L {5} -o {6} " +
+                    "-verbose -rf DuplicateRead --filter_reads_with_N_cigar " +
+                    "--filter_mismatching_base_and_quals").format(JAVA_TEMP, opts.xmx_java, GATK, REFERENCE, opts.bam, MARKER_FILE, opts.outfile, opts.java)
+"""
 command_line = ("{7} {0} -Xmx{1} -jar {2} -T Pileup -R {3} -I {4} -L {5} -o {6} " +
 				"-verbose -rf DuplicateRead --filter_reads_with_N_cigar " +
 				"--filter_mismatching_base_and_quals").format(JAVA_TEMP, opts.xmx_java, GATK, REFERENCE, opts.bam, MARKER_FILE, opts.outfile, opts.java)
-
+"""
+print("Command: " + command_line + "\n***********************************************************************")
 os.system(command_line)
 
 

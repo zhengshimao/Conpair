@@ -89,7 +89,7 @@ Optional:
 --min_base_quality  MIN_BASE_QUAL   do not use reads with base qual below MIN_BASE_QUAL of a specified position [default: 20]
 --markers MARKERS                   the set of preselected genomic positions in the TXT format. Default: ${CONPAIR_DIR}/data/markers/GRCh37.autosomes.phase3_shapeit2_mvncall_integrated.20130502.SNV.genotype.sselect_v4_MAF_0.4_LD_0.8.txt
 
-```  
+```
 Estimating contamination level in both the tumor and the normal:
 ```
 
@@ -104,7 +104,7 @@ Optional:
 --conpair_dir CONPAIR_DIR           path to ${CONPAIR_DIR}
 --grid  GRID                        grid interval [default: 0.01]
 
-```  
+```
 # Output files
 **Pileup**  
 An example of a pileup file (10 first lines) can be viewed here: ([`pileup.txt`](https://github.com/nygenome/Conpair/blob/master/data/example/pileup/NA12878_normal40x.gatk.pileup.10lines.txt)).
@@ -125,3 +125,8 @@ You can observe slighly lower concordance (80-99%) in presence of contamination 
 <br/>
 **Contamination**   
 Even a very low contamination level (such as 0.5%) in the tumor sample will have a severe effect on calling somatic mutations, resulting in decreased specificity. Cross-individual contamination in the normal sample usually has a milder effect on somatic calling.
+
+# 郑
+
+修改参考：[Issues · nygenome/Conpair](https://github.com/nygenome/Conpair/issues/11)
+
