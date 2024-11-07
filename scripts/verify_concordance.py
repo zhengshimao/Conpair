@@ -14,16 +14,15 @@ import os
 import optparse
 import math
 from collections import defaultdict
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'modules')))
 from ContaminationModel import *
 from ContaminationMarker import *
-
-CONPAIR_DIR = os.environ['CONPAIR_DIR']
-MARKER_FILE = os.path.join(CONPAIR_DIR, 'data', 'markers', 'GRCh37.autosomes.phase3_shapeit2_mvncall_integrated.20130502.SNV.genotype.sselect_v4_MAF_0.4_LD_0.8.txt')
 
 desc = """Program to verify tumor-normal sample concordance"""
 parser = optparse.OptionParser(version='%prog version 0.15 3/August/2016', description=desc)
 parser.add_option('-T', '--tumor_pileup', help='TUMOR PILEUP FILE [mandatory field]', action='store')
 parser.add_option('-N', '--normal_pileup', help='NORMAL PILEUP FILE [mandatory field]', action='store')
+parser.add_option('-D', '--conpair_dir', help='CONPAIR DIR [$CONPAIR_DIR by default]', action='store')
 parser.add_option('-M', '--markers', help='MARKER FILE [Conpair-GRCh37-default]', action='store')
 parser.add_option('-C', '--min_cov', help='MIN COVERAGE TO CALL GENOTYPE [default: 10]', default=10, type='int', action='store')
 parser.add_option('-O', '--outfile', help='TXT OUTPUT FILE [stdout by default]', default="-", type='string', action='store')
@@ -45,8 +44,16 @@ if not os.path.exists(opts.normal_pileup):
     print('ERROR: Input normal file {0} cannot be found.'.format(opts.normal_pileup))
     sys.exit(1)
 
+if opts.conpair_dir:
+    CONPAIR_DIR = opts.conpair_dir
+    print(CONPAIR_DIR)
+else:
+    CONPAIR_DIR = os.environ['CONPAIR_DIR']
+
 if opts.markers:
     MARKER_FILE = opts.markers
+else: 
+    MARKER_FILE = os.path.join(CONPAIR_DIR, 'data', 'markers', 'GRCh37.autosomes.phase3_shapeit2_mvncall_integrated.20130502.SNV.genotype.sselect_v4_MAF_0.4_LD_0.8.txt')
 
 if not os.path.exists(MARKER_FILE):
     print('ERROR: Marker file {0} cannot be find.'.format(MARKER_FILE))
