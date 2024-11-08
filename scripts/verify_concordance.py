@@ -46,7 +46,7 @@ if not os.path.exists(opts.normal_pileup):
 
 if opts.conpair_dir:
     CONPAIR_DIR = opts.conpair_dir
-    print(CONPAIR_DIR)
+    #print(CONPAIR_DIR)
 else:
     CONPAIR_DIR = os.environ['CONPAIR_DIR']
 
