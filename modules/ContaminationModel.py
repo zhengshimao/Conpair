@@ -20,10 +20,11 @@ import sys
 import os
 import numpy as np
 from collections import defaultdict
-from MathOperations import *
 from math import log10
 import scipy
 from scipy import stats
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'modules')))
+from MathOperations import *
 
 
 baseQ_max = 60
