@@ -62,13 +62,13 @@ class Pileup:
 
 
 def parse_mpileup_line(line, min_map_quality=0, min_base_quality=0):
-    
     line = line.split()
     chrom = line[0]
     pos = line[1]
     ref = line[2]
     bases = line[3]
     baseQs = baseQ2int(line[4])
+    # print(baseQs)
     
     if min_map_quality > 0:
         verbose_lines = line[6].split(',')
