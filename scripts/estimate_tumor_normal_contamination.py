@@ -33,16 +33,6 @@ parser.add_option('-Q', '--min_mapping_quality', help='MIN MAPPING QUALITY [defa
 
 (opts, args) = parser.parse_args()
 
-if opts.conpair_dir:
-    CONPAIR_DIR = opts.conpair_dir
-else:
-    CONPAIR_DIR = os.environ['CONPAIR_DIR']
-
-ContaminationModel = imp.load_source('/ContaminationModel', CONPAIR_DIR + '/modules/ContaminationModel.py')
-ContaminationMarker = imp.load_source('/ContaminationMarker', CONPAIR_DIR + '/modules/ContaminationMarker.py')
-MathOperations = imp.load_source('/MathOperations', CONPAIR_DIR + '/modules/MathOperations.py')
-Genotypes = imp.load_source('/Genotypes', CONPAIR_DIR + '/modules/Genotypes.py')
-
 if not opts.tumor_pileup or not opts.normal_pileup:
     parser.print_help()
     sys.exit(1)
@@ -54,6 +44,16 @@ if not os.path.exists(opts.tumor_pileup):
 if not os.path.exists(opts.normal_pileup):
     print('ERROR: Input normal file {0} cannot be find.'.format(opts.normal_pileup))
     sys.exit(1)
+
+if opts.conpair_dir:
+    CONPAIR_DIR = opts.conpair_dir
+else:
+    CONPAIR_DIR = os.environ['CONPAIR_DIR']
+
+ContaminationModel = imp.load_source('/ContaminationModel', CONPAIR_DIR + '/modules/ContaminationModel.py')
+ContaminationMarker = imp.load_source('/ContaminationMarker', CONPAIR_DIR + '/modules/ContaminationMarker.py')
+MathOperations = imp.load_source('/MathOperations', CONPAIR_DIR + '/modules/MathOperations.py')
+Genotypes = imp.load_source('/Genotypes', CONPAIR_DIR + '/modules/Genotypes.py')
     
 if opts.markers:
     MARKER_FILE = opts.markers
